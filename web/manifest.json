@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "fun_app",
     "short_name": "fun_app",
+=======
+    "name": "agriculture_app",
+    "short_name": "agriculture_app",
+>>>>>>> ee4c5fafe226dd61a89efefad5751728f5c369ba
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

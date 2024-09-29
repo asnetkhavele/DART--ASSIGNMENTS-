@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 # fun_app
+=======
+# agriculture_app
+>>>>>>> ee4c5fafe226dd61a89efefad5751728f5c369ba
 
 A new Flutter project.
 

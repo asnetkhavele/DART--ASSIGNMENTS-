@@ -1,6 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
+<<<<<<< HEAD
         android:label="fun_app"
+=======
+        android:label="agriculture_app"
+>>>>>>> ee4c5fafe226dd61a89efefad5751728f5c369ba
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

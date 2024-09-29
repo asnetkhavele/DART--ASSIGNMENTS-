@@ -27,7 +27,11 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1280, 720);
+<<<<<<< HEAD
   if (!window.Create(L"fun_app", origin, size)) {
+=======
+  if (!window.Create(L"agriculture_app", origin, size)) {
+>>>>>>> ee4c5fafe226dd61a89efefad5751728f5c369ba
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);
