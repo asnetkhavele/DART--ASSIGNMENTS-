@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'dashboard_page.dart'; // Make sure to import the DashboardPage
+import 'dashboard_page.dart'; // Make sure this page is defined
 
 class SendMoneyPage extends StatefulWidget {
   @override
@@ -26,22 +26,17 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Recipient Name'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter a recipient name';
-                  }
-                  return null;
-                },
+              CustomTextField(
+                label: 'Recipient Name',
+                validator: (value) => value == null || value.isEmpty ? 'Enter a name' : null,
                 onSaved: (value) => recipientName = value,
               ),
-              TextFormField(
-                decoration: InputDecoration(labelText: 'Amount'),
+              CustomTextField(
+                label: 'Amount',
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || double.tryParse(value) == null || double.parse(value) <= 0) {
-                    return 'Please enter a valid positive amount';
+                    return 'Enter a valid amount';
                   }
                   return null;
                 },
@@ -60,42 +55,21 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
               SwitchListTile(
                 title: Text('Mark as Favorite'),
                 value: isFavorite,
-                onChanged: (value) {
-                  setState(() {
-                    isFavorite = value;
-                  });
-                },
+                onChanged: (value) => setState(() => isFavorite = value),
               ),
-              ReusableButton(
+              CustomButton(
                 text: 'Send Money',
                 onPressed: () {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
                     showSuccessMessage();
-
-                    // Navigate to Dashboard with custom transition
-                    Navigator.of(context).push(PageRouteBuilder(
-                      pageBuilder: (context, animation, secondaryAnimation) => DashboardPage(),
-                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                        const begin = Offset(1.0, 0.0);
-                        const end = Offset.zero;
-                        const curve = Curves.easeInOut;
-
-                        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
-                        var offsetAnimation = animation.drive(tween);
-
-                        return SlideTransition(
-                          position: offsetAnimation,
-                          child: child,
-                        );
-                      },
-                    ));
+                    navigateToDashboard();
                   }
                 },
               ),
               AnimatedOpacity(
                 opacity: _isSuccessMessageVisible ? 1.0 : 0.0,
-                duration: Duration(milliseconds: 500),
+                duration: Duration(milliseconds: 300),
                 child: Container(
                   padding: EdgeInsets.all(16.0),
                   margin: EdgeInsets.only(top: 20),
@@ -120,20 +94,62 @@ class _SendMoneyPageState extends State<SendMoneyPage> {
     setState(() {
       _isSuccessMessageVisible = true;
     });
-
     Future.delayed(Duration(seconds: 2), () {
       setState(() {
         _isSuccessMessageVisible = false;
       });
     });
   }
+
+  void navigateToDashboard() {
+    Navigator.of(context).push(PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => DashboardPage(),
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.easeInOut;
+
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    ));
+  }
 }
 
-class ReusableButton extends StatelessWidget {
+class CustomTextField extends StatelessWidget {
+  final String label;
+  final String? Function(String?)? validator;
+  final void Function(String?)? onSaved;
+  final TextInputType? keyboardType;
+
+  const CustomTextField({
+    required this.label,
+    this.validator,
+    this.onSaved,
+    this.keyboardType,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      decoration: InputDecoration(labelText: label),
+      validator: validator,
+      onSaved: onSaved,
+      keyboardType: keyboardType,
+    );
+  }
+}
+
+class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const ReusableButton({required this.text, required this.onPressed});
+  const CustomButton({required this.text, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
